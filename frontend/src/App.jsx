@@ -1,15 +1,19 @@
 import React from 'react';
 import { NavLink, Route, Routes } from 'react-router-dom';
 import { useCart } from './context/CartContext.jsx';
+import { useAuth } from './context/AuthContext.jsx';
 import ProductsPage from './pages/ProductsPage.jsx';
 import ProductDetailsPage from './pages/ProductDetailsPage.jsx';
 import CartPage from './pages/CartPage.jsx';
 import CheckoutPage from './pages/CheckoutPage.jsx';
 import AssistantPage from './pages/AssistantPage.jsx';
 import NotFoundPage from './pages/NotFoundPage.jsx';
+import LoginPage from './pages/LoginPage.jsx';
+import OrdersPage from './pages/OrdersPage.jsx';
 
 export default function App() {
   const { itemCount } = useCart();
+  const { user, logout } = useAuth();
 
   return (
     <div className="app-shell">
@@ -22,6 +26,16 @@ export default function App() {
           <NavLink to="/">Products</NavLink>
           <NavLink to="/assistant">AI Assistant</NavLink>
           <NavLink to="/cart">Cart ({itemCount})</NavLink>
+          {user ? (
+            <>
+              <NavLink to="/orders">My orders</NavLink>
+              <button type="button" className="link-button" onClick={logout}>
+                Sign out ({user.name})
+              </button>
+            </>
+          ) : (
+            <NavLink to="/login">Sign in</NavLink>
+          )}
         </nav>
       </header>
 
@@ -35,6 +49,8 @@ export default function App() {
           <Route path="/cart" element={<CartPage />} />
           <Route path="/checkout" element={<CheckoutPage />} />
           <Route path="/assistant" element={<AssistantPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/orders" element={<OrdersPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </main>

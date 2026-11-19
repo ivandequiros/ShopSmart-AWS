@@ -143,3 +143,14 @@ form { display: grid; gap: 1rem; }
     text-align: center;
   }
 }
+/* Text-style button used for "Sign out" and the login/register toggle. */
+.link-button {
+  background: none;
+  border: none;
+  padding: 0;
+  color: inherit;
+  font: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+}
+.link-button:hover { background: none; opacity: .8; }

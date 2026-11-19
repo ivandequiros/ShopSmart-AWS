@@ -16,3 +16,14 @@ export const orderSchema = z.object({
 export const assistantQuestionSchema = z.object({
   question: z.string().trim().min(3).max(300)
 });
+
+export const registerSchema = z.object({
+  name: z.string().trim().min(2).max(80),
+  email: z.string().trim().toLowerCase().max(254).pipe(z.email()),
+  password: z.string().min(8).max(128)
+});
+
+export const loginSchema = z.object({
+  email: z.string().trim().toLowerCase().max(254).pipe(z.email()),
+  password: z.string().min(1).max(128)
+});

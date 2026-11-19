@@ -1,16 +1,18 @@
 
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext.jsx';
 import StatusMessage from '../components/StatusMessage.jsx';
 import { useCart } from '../context/CartContext.jsx';
 import { api } from '../services/api.js';
 
 export default function CheckoutPage() {
   const { cart, total, clearCart } = useCart();
+  const { user, checking } = useAuth();
 
   const [form, setForm] = useState({
-    customerName: '',
-    email: '',
+    customerName: user?.name || '',
+    email: user?.email || '',
     address: ''
   });
 
@@ -72,7 +74,27 @@ export default function CheckoutPage() {
 
         <Link className="button" to="/">
           Continue shopping
-        </Link>
+        </Link>{' '}
+        <Link to="/orders">View my orders</Link>
+      </section>
+    );
+  }
+
+  // Orders belong to an account, so checkout requires sign-in.
+  if (checking) {
+    return <p role="status">Checking your session…</p>;
+  }
+
+  if (!user) {
+    return (
+      <section>
+        <div className="empty-state">
+          <h1>Sign in to check out</h1>
+          <p>Your cart is kept while you sign in.</p>
+          <Link className="button" to="/login" state={{ from: '/checkout' }}>
+            Sign in or create an account
+          </Link>
+        </div>
       </section>
     );
   }

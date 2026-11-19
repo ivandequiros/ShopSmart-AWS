@@ -30,6 +30,30 @@ model Order {
   total        Decimal     @db.Decimal(10, 2)
   createdAt    DateTime    @default(now())
   items        OrderItem[]
+  userId       Int?
+  user         User?       @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+}
+
+model User {
+  id           Int       @id @default(autoincrement())
+  name         String
+  email        String    @unique
+  passwordHash String
+  createdAt    DateTime  @default(now())
+  orders       Order[]
+  sessions     Session[]
+}
+
+model Session {
+  id        String   @id
+  userId    Int
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }
 
 model OrderItem {
